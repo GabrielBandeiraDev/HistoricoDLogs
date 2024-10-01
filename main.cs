@@ -22,6 +22,7 @@ using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FCT_FACTORY
@@ -42,6 +43,13 @@ namespace FCT_FACTORY
         //array usado para percorrer os testes - necessidade: pular testes
         int[] teste127_220 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
         int[] teste127_220_oduPadrao = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+        
+        int[] teste127_220_1 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
+        int[] teste127_220_oduPadrao_2 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+
+        string naoFazteste2;
+        string naoFazTeste1;
+        string modeloPassando2;
 
         bool msgDeErro = false;
         public bool instanciaEmerg = false;
@@ -106,11 +114,7 @@ namespace FCT_FACTORY
 
 
         /// //////////////////
-        string naoFazteste2;
-        string naoFazTeste1;
-        string modeloPassando2;
-        int[] teste127_220_1 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13 };
-        int[] teste127_220_oduPadrao_2 = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+        
         /////////////////////
 
 
@@ -162,6 +166,7 @@ namespace FCT_FACTORY
                     if (str[0] == "port") { serialPort1.PortName = str[1]; }
                     if (str[0] == "port2") { serialPort2.PortName = str[1]; }
                     if (str[0] == "speed") { timer1.Interval = int.Parse(str[1]); }
+                    if (str[0] == "speed2") { timer5.Interval = int.Parse(str[1]); }
                     if (str[0] == "baudRate") { serialPort1.BaudRate = int.Parse(str[1]); }
                     if (str[0] == "baudRate2") { serialPort2.BaudRate = int.Parse(str[1]); }
                     if (str[0] == "script") { caminho = str[1]; }
@@ -193,6 +198,8 @@ namespace FCT_FACTORY
                 serialPort2.PortName = _myIni.Read("com2", "Port");
                 serialPort2.BaudRate = int.Parse(_myIni.Read("baudRate2", "Port"));
                 timer1.Interval = int.Parse(_myIni.Read("Speed", "setSpeed"));
+                timer5.Interval = int.Parse(_myIni.Read("Speed", "setSpeed"));
+
 
                 string cm = _myIni.Read("SCRIPT", "dataBase");
                 string posto = _myIni.Read("ID", "dataBase");
@@ -662,6 +669,7 @@ namespace FCT_FACTORY
             clearDataGrid1();
             clearDataGrid2();
             timer1.Stop();
+            timer5.Stop();
             rxData = "";
             rxData2 = "";
             getSerial = true;
@@ -839,11 +847,7 @@ namespace FCT_FACTORY
 
         bool resultadoDoCheck2 = false;
 
-
-        private bool TesteGrid1 = true; // Controle para dataGridView1
-        private bool TesteGrid2 = true; // Controle para dataGridView2
-
-        private void timer1_Tick(object sender, EventArgs e)
+        private  void timer1_Tick(object sender, EventArgs e)
         {
             if (fail == false)
             {
@@ -854,7 +858,7 @@ namespace FCT_FACTORY
                     inicio = true;
                 }
 
-                if (TesteGrid1 && getSerial && getSerial2)
+                if (getSerial && getSerial2)
                 {
                     TEST[0] = true;
                     TEST2[0] = true;
@@ -881,6 +885,7 @@ namespace FCT_FACTORY
 
                     if (naoFazteste2 != "NaoFazTeste")
                     {
+                     
                         textBox7.Visible = true;
                         textBox7.Text = "TESTING...";
                         textBox7.BackColor = Color.Yellow;
@@ -995,7 +1000,7 @@ namespace FCT_FACTORY
                             {
                                 statusTest = "FAIL";
                                 dataGridView1.Rows[indexTest].Cells[4].Value = statusTest;
-                                TesteGrid1 = false; // Para o teste de grid 1
+                               
                             }
                             
 
@@ -1045,6 +1050,11 @@ namespace FCT_FACTORY
                             dataGridView1.DefaultCellStyle.SelectionForeColor = Color.Red;
                             textBox6.Visible = true;
                             textBox6.Text = "FAIL";
+                            if (textBox6.Text == "FAIL")
+                            {
+                                TEST2[0] = false;
+                            }
+                            
                             textBox6.BackColor = Color.Red;
                             timer1.Stop();
 
@@ -1071,165 +1081,9 @@ namespace FCT_FACTORY
                 }
 
 
-                if (RES_TEST2[indexTest2])
-                {
-                    textBox2.Text = rxData2;
-                    if (textBox2.Text.Contains("X"))
-                    {
-                        string[] dados2 = textBox2.Text.Split(';');
-
-
-                        try
-                        {
-                            if (indexTest2 == 3)
-                            {
-                                // temp1Sensor = double.Parse(dados[1]);
-                                // temp2Sensor = double.Parse(dados[2]);
-                            }
-                        }
-                        catch (Exception)
-                        {
-
-                            if (!msgDeErro)
-                            {
-                                resultadoDoCheck2 = false;
-                            }
-                        }
-                        if (modeloPassando2 == "model_quenteFrio")
-                        {
-                            try
-                            {
-                                resultadoDoCheck2 = checkTest2(teste127_220_1[indexTest2], double.Parse(dados2[2]), dados2[2]);
-                            }
-                            catch (Exception)
-                            {
-
-                                Console.WriteLine("Error");
-                            }
-                        }
-
-                        if (modeloPassando2 == "model_padrao")
-                        {
-                            resultadoDoCheck2 = checkTest2(teste127_220_oduPadrao_2[indexTest2], double.Parse(dados2[2]), dados2[2]);
-
-                        }
-
-                        if (resultadoDoCheck2)
-                        {
-                            {
-                                //TESTE CURTO CIRCUITO
-                                if (indexTest2 == 0)
-                                {
-                                    TESTS2[1, indexTest2] = "APROVADO";
-                                    temp_ini2 = double.Parse(dados2[2]);
-
-                                    temp_ini2 = temp_ini2 / 100;
-                                }
-                                else if (indexTest2 == 2 || indexTest2 == 8) { /*TESTS[1, indexTest] = dados[2];*/ }   //TEST EFICIENCIA 100 e 230AC
-                                else
-                                {
-                                    // TESTS[1, indexTest] = dados[1] + "VAC, " + dados[2] + "VDC, " + dados[3] + "A";
-                                }
-                                statusTest = "PASS";
-                                dataGridView2.Rows[indexTest2].Cells[1].Value = dados2[1];
-                                dataGridView2.Rows[indexTest2].Cells[3].Value = dados2[2];
-                                dataGridView2.Rows[indexTest2].Cells[4].Value = statusTest;
-
-                                dataGridView2.DefaultCellStyle.SelectionForeColor = Color.Green;
-                                dataGridView2.Rows[indexTest2].Selected = false;
-                                indexTest2++;
-                                TEST2[indexTest2] = true;
-                                dados2[0] = "";
-
-                                RES_TEST2[indexTest2] = false;
-                                rxData2 = "";
-                                textBox2.Text = "";
-
-                                if (modeloPassando2 == "model_quenteFrio")
-                                {
-                                    serialPort1.Write(teste127_220_1[indexTest2].ToString());
-                                    Console.WriteLine("QuenteFrio: " + teste127_220_1[indexTest2]);
-                                }
-
-                                if (modeloPassando2 == "model_padrao")
-                                {
-                                    try
-                                    {
-                                        serialPort1.Write(teste127_220_oduPadrao_2[indexTest2].ToString());
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        MessageBox.Show("Erro " + ex.ToString());
-
-                                    }
-
-
-                                    Console.WriteLine("Padrao: " + teste127_220_oduPadrao_2[indexTest2]);
-                                }
-                                if (indexTest2 == 7)
-                                {
-                                    button1.Text = "PRESSIONE A TECLA LIG/DESL DO CONTROLE (AO ACENDER O DISPLAY)";
-                                }
-
-
-                                if (indexTest2 == 9)
-                                {
-                                    button1.Text = "Aguarde...";
-                                }
-
-                                else
-                                {
-                                    //TESTE CURTO CIRCUITO
-                                    if (indexTest2 == 0) { TESTS2[1, indexTest2] = "FALHA"; }
-                                    else if (indexTest2 == 2 || indexTest2 == 8) { TESTS2[1, indexTest2] = dados2[2]; }   //TEST EFICIENCIA 100 e 230AC
-                                    else
-                                    {
-                                        TESTS2[1, indexTest2] = dados2[1] + "VAC, " + dados2[2] + "VDC, " + dados2[3] + "A";
-                                    }
-
-                                    dataGridView2.DefaultCellStyle.SelectionForeColor = Color.Red;
-                                    textBox7.Visible = true;
-                                    textBox7.Text = "FAIL";
-                                    textBox7.BackColor = Color.Red;
-                                   
-
-                                    inicio = false;
-
-                                    statusTest = "FAIL";
-                                    dataGridView2.Rows[indexTest2].Cells[1].Value = dados2[1];
-                                    dataGridView2.Rows[indexTest2].Cells[3].Value = dados2[2];
-                                    dataGridView2.Rows[indexTest2].Cells[4].Value = statusTest;
-
-                                    button1.Text = "O Teste: " + " | " + indexTest2.ToString() + " | " + "Falhou";
-
-
-                                }
-                                createLogs2(1);
-
-                                if (trackingTest)
-                                {
-                                    if (_mode == "txt")
-                                    {
-                                        createLogs2(1);
-
-                                    }
-                                }
-                            }
-
-
-                                    
-                        }
-                    }
-                }
-
-
-
-
-
-
-
-                if (!TesteGrid1 && !TesteGrid2 || !!TesteGrid1 )
-                {
+                
+    
+                
                     if (indexTest > linhasTotal - 1 && indexTest2 > linhasTotal - 1)
                     {
                         serialPort1.Write("12");
@@ -1243,7 +1097,7 @@ namespace FCT_FACTORY
                     }
                 }
             }
-        }
+        
 
                  
 
@@ -1366,6 +1220,7 @@ namespace FCT_FACTORY
                 //cmdAT = comando;
                 textBox2.Text = "";
                 timer1.Stop();
+                timer5.Stop();
                 //cmdAT AT+LEDR,OK
                 if (!serialPort2.IsOpen) { serialPort2.Open(); }
 
@@ -1397,6 +1252,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Start();
                 }
             }
 
@@ -1412,6 +1268,7 @@ namespace FCT_FACTORY
             {
                 textBox2.Text = "";
                 timer1.Stop();
+                timer5.Stop();
                 if (!serialPort2.IsOpen)
                 {
                     serialPort2.Open();
@@ -1434,6 +1291,7 @@ namespace FCT_FACTORY
 
                     MessageBox.Show(etq, "ETIQUETA");
                     timer1.Start();
+                    timer5.Stop();
                 }
                 else
                 {
@@ -1446,6 +1304,7 @@ namespace FCT_FACTORY
             {
                 textBox2.Text = "";
                 timer1.Stop();
+                timer5.Stop();
                 if (!serialPort2.IsOpen)
                 {
                     serialPort2.Open();
@@ -1468,6 +1327,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Start();
                 }
 
             }
@@ -1476,6 +1336,7 @@ namespace FCT_FACTORY
             {
                 textBox2.Text = "";
                 timer1.Stop();
+                timer5.Stop();
                 if (!serialPort2.IsOpen)
                 {
                     serialPort2.Open();
@@ -1497,6 +1358,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Start();
                 }
 
             }
@@ -1508,6 +1370,7 @@ namespace FCT_FACTORY
                 try
                 {
                     timer1.Stop();
+                    timer5.Stop();
 
                     recebeFormSerial = "";
                     snum = "";
@@ -1525,6 +1388,7 @@ namespace FCT_FACTORY
                     mac += snum.Substring(8, 2) + "-";
                     mac += snum.Substring(10, 2);
                     timer1.Start();
+                    timer5.Stop();
                 }
                 catch (Exception)
                 {
@@ -1535,6 +1399,7 @@ namespace FCT_FACTORY
             else if (comando == "cmdRMC")
             {
                 timer1.Stop();
+                timer5.Stop();
                 cmdExec("getmac > mac.txt");
                 Thread.Sleep(2000);
 
@@ -1549,6 +1414,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Stop();
                 }
             }
 
@@ -1558,6 +1424,7 @@ namespace FCT_FACTORY
                 string mem = comando.Substring(7, comando.Length - 7);
                 textBox2.Text = mem;
                 timer1.Stop();
+                timer5.Stop();
 
                 StreamReader sr = new StreamReader("system.txt");
                 system = sr.ReadToEnd();
@@ -1570,6 +1437,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Start();
                 }
             }
 
@@ -1591,6 +1459,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Start();
                 }
             }
 
@@ -1600,6 +1469,7 @@ namespace FCT_FACTORY
                 string bios = comando.Substring(8, comando.Length - 8);
                 textBox2.Text = bios;
                 timer1.Stop();
+                timer5.Stop();
 
                 StreamReader sr = new StreamReader("system.txt");
                 system = sr.ReadToEnd();
@@ -1612,6 +1482,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Stop();
                 }
             }
 
@@ -1622,6 +1493,7 @@ namespace FCT_FACTORY
                 string PCI = comando.Substring(7, comando.Length - 7);
                 textBox2.Text = PCI;
                 timer1.Stop();
+                timer5.Stop();
 
                 StreamReader sr = new StreamReader("system.txt");
                 system = sr.ReadToEnd();
@@ -1634,6 +1506,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Start();
                 }
             }
 
@@ -1662,8 +1535,10 @@ namespace FCT_FACTORY
             else if (comando.Contains("cmdALT"))
             {
                 timer1.Stop();
+                timer5.Stop();
                 ALERT alert = new ALERT();
                 alert.ShowDialog();
+                timer5.Start();
                 timer1.Start();
             }
 
@@ -1673,6 +1548,7 @@ namespace FCT_FACTORY
                 string ODD = comando.Substring(7, comando.Length - 7);
                 textBox2.Text = ODD;
                 timer1.Stop();
+                timer5.Stop();
 
                 StreamReader sr = new StreamReader("ODD.txt");
                 system = sr.ReadToEnd();
@@ -1685,6 +1561,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Start();
                 }
             }
 
@@ -1695,6 +1572,7 @@ namespace FCT_FACTORY
                 try
                 {
                     timer1.Stop();
+                    timer5.Stop();
                     Process.Start("eth.bat");
                     Thread.Sleep(3000);
                     string ping = comando.Substring(7, comando.Length - 7);
@@ -1706,6 +1584,7 @@ namespace FCT_FACTORY
                     else
                     {
                         timer1.Start();
+                        timer4.Start();
                     }
                 }
                 catch (Exception)
@@ -1719,11 +1598,13 @@ namespace FCT_FACTORY
             else if (comando.Contains("cmdBEEP"))
             {
                 timer1.Stop();
+                timer5.Stop();
                 Process.Start("Beep.exe");
                 DialogResult result = MessageBox.Show("O som do BEEP foi reproduzido?", "TESTE BEEP", MessageBoxButtons.YesNo);
                 if (result == DialogResult.Yes)
                 {
                     timer1.Start();
+                    timer5.Start();
                 }
                 else
                 {
@@ -1763,6 +1644,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Start();
                 }
             }
             //GRAVA SERIAL NUMBER 2
@@ -1793,6 +1675,7 @@ namespace FCT_FACTORY
                 }
 
                 timer1.Stop();
+                timer5.Stop();
                 recebeFormSerial = "";
                 channel = "";
                 Serial sr = new Serial(this);
@@ -1819,6 +1702,7 @@ namespace FCT_FACTORY
                     if (textBox2.Text.Contains(channel) || textBox2.Text.Contains("OK"))
                     {
                         timer1.Start();
+                        timer5.Start();
                     }
                     else
                     {
@@ -1843,6 +1727,7 @@ namespace FCT_FACTORY
 
 
                 timer1.Stop();
+                timer5.Stop();
                 recebeFormSerial = "";
                 addr = "";
                 Serial sr = new Serial(this);
@@ -1870,6 +1755,7 @@ namespace FCT_FACTORY
                     if (textBox2.Text.Contains("OK") || textBox2.Text.Contains(addr))
                     {
                         timer1.Start();
+                        timer5.Start();
                     }
                     else
                     {
@@ -1889,6 +1775,7 @@ namespace FCT_FACTORY
             else if (comando.Contains("cmdDLY"))
             {
                 timer1.Stop();
+                timer5.Stop() ;
                 try
                 {
                     ms = int.Parse(comando.Substring(7, comando.Length - 7));
@@ -1897,6 +1784,7 @@ namespace FCT_FACTORY
                     {
                         Application.DoEvents();
                     }
+                    timer1.Start();
                     timer1.Start();
                 }
                 catch
@@ -1987,6 +1875,7 @@ namespace FCT_FACTORY
 
             msgRead = comando;
             timer1.Stop();
+            timer5.Stop();
             contaFalha++;
             textBox2.Text = "";
             str = comando.Split(',');
@@ -2049,6 +1938,7 @@ namespace FCT_FACTORY
 
                     //testRead = true;
                     timer1.Start();
+                    timer5.Start();
                     contaFalha = 0;
                     reteste = false;
                 }
@@ -2067,6 +1957,7 @@ namespace FCT_FACTORY
                         contador = lineReteste - 1;
                         Console.WriteLine(contaFalha.ToString());
                         timer1.Start();
+                        timer5.Start();
                     }
                 }
             }
@@ -2112,6 +2003,7 @@ namespace FCT_FACTORY
             try
             {
                 timer1.Stop();
+                timer5.Stop();
                 testStatus = "PASS";
                 inicio = false;
 
@@ -2167,6 +2059,7 @@ namespace FCT_FACTORY
             Thread.Sleep(200);
             textBox1.BackColor = Color.Red;
             timer1.Stop();
+            timer5.Stop();
             msgFail = textBox1.Text;
             richTextBox2.Text += contaTeste.ToString() + " - " + validaTeste + "\t[FAIL]\r\n";
             FAIL fim = new FAIL(this);
@@ -2190,6 +2083,7 @@ namespace FCT_FACTORY
                 else
                 {
                     timer1.Start();
+                    timer5.Start();
 
                 }
 
@@ -2630,6 +2524,162 @@ namespace FCT_FACTORY
 
         }
 
+        private void timer5_Tick_1(object sender, EventArgs e)
+        {
+            if (RES_TEST2[indexTest2])
+            {
+                textBox2.Text = rxData2;
+                if (textBox2.Text.Contains("X"))
+                {
+                    string[] dados2 = textBox2.Text.Split(';');
+
+
+                    try
+                    {
+                        if (indexTest2 == 3)
+                        {
+                            // temp1Sensor = double.Parse(dados[1]);
+                            // temp2Sensor = double.Parse(dados[2]);
+                        }
+                    }
+                    catch (Exception)
+                    {
+
+                        if (!msgDeErro)
+                        {
+                            resultadoDoCheck2 = false;
+                        }
+                    }
+                    if (modeloPassando2 == "model_quenteFrio")
+                    {
+                        try
+                        {
+                            resultadoDoCheck2 = checkTest2(teste127_220_1[indexTest2], double.Parse(dados2[2]), dados2[2]);
+                        }
+                        catch (Exception)
+                        {
+
+                            Console.WriteLine("Error");
+                        }
+                    }
+
+                    if (modeloPassando2 == "model_padrao")
+                    {
+                        resultadoDoCheck2 = checkTest2(teste127_220_oduPadrao_2[indexTest2], double.Parse(dados2[2]), dados2[2]);
+
+                    }
+
+                    if (resultadoDoCheck2)
+                    {
+                        {
+                            //TESTE CURTO CIRCUITO
+                            if (indexTest2 == 0)
+                            {
+                                TESTS2[1, indexTest2] = "APROVADO";
+                                temp_ini2 = double.Parse(dados2[2]);
+
+                                temp_ini2 = temp_ini2 / 100;
+                            }
+                            else if (indexTest2 == 2 || indexTest2 == 8) { /*TESTS[1, indexTest] = dados[2];*/ }   //TEST EFICIENCIA 100 e 230AC
+                            else
+                            {
+                                // TESTS[1, indexTest] = dados[1] + "VAC, " + dados[2] + "VDC, " + dados[3] + "A";
+                            }
+                            statusTest = "PASS";
+                            dataGridView2.Rows[indexTest2].Cells[1].Value = dados2[1];
+                            dataGridView2.Rows[indexTest2].Cells[3].Value = dados2[2];
+                            dataGridView2.Rows[indexTest2].Cells[4].Value = statusTest;
+
+                            dataGridView2.DefaultCellStyle.SelectionForeColor = Color.Green;
+                            dataGridView2.Rows[indexTest2].Selected = false;
+                            indexTest2++;
+                            TEST2[indexTest2] = true;
+                            dados2[0] = "";
+
+                            RES_TEST2[indexTest2] = false;
+                            rxData2 = "";
+                            textBox2.Text = "";
+
+                            if (modeloPassando2 == "model_quenteFrio")
+                            {
+                                serialPort1.Write(teste127_220_1[indexTest2].ToString());
+                                Console.WriteLine("QuenteFrio: " + teste127_220_1[indexTest2]);
+                            }
+
+                            if (modeloPassando2 == "model_padrao")
+                            {
+                                try
+                                {
+                                    serialPort1.Write(teste127_220_oduPadrao_2[indexTest2].ToString());
+                                }
+                                catch (Exception ex)
+                                {
+                                    MessageBox.Show("Erro " + ex.ToString());
+
+                                }
+
+
+                                Console.WriteLine("Padrao: " + teste127_220_oduPadrao_2[indexTest2]);
+                            }
+                            if (indexTest2 == 7)
+                            {
+                                button1.Text = "PRESSIONE A TECLA LIG/DESL DO CONTROLE (AO ACENDER O DISPLAY)";
+                            }
+
+
+                            if (indexTest2 == 9)
+                            {
+                                button1.Text = "Aguarde...";
+                            }
+
+                            else
+                            {
+                                //TESTE CURTO CIRCUITO
+                                if (indexTest2 == 0) { TESTS2[1, indexTest2] = "FALHA"; }
+                                else if (indexTest2 == 2 || indexTest2 == 8) { TESTS2[1, indexTest2] = dados2[2]; }   //TEST EFICIENCIA 100 e 230AC
+                                else
+                                {
+                                    TESTS2[1, indexTest2] = dados2[1] + "VAC, " + dados2[2] + "VDC, " + dados2[3] + "A";
+                                }
+
+                                dataGridView2.DefaultCellStyle.SelectionForeColor = Color.Red;
+                                textBox7.Visible = true;
+                                textBox7.Text = "FAIL";
+                                textBox7.BackColor = Color.Red;
+                                timer5.Stop();
+
+
+
+                                inicio = false;
+
+                                statusTest = "FAIL";
+                                dataGridView2.Rows[indexTest2].Cells[1].Value = dados2[1];
+                                dataGridView2.Rows[indexTest2].Cells[3].Value = dados2[2];
+                                dataGridView2.Rows[indexTest2].Cells[4].Value = statusTest;
+
+                                button1.Text = "O Teste: " + " | " + indexTest2.ToString() + " | " + "Falhou";
+
+
+                            }
+                            createLogs2(1);
+
+                            if (trackingTest)
+                            {
+                                if (_mode == "txt")
+                                {
+                                    createLogs2(1);
+
+                                }
+                            }
+                        }
+
+
+
+                    }
+                }
+            }
+        }
+
         private void button4_Click_3(object sender, EventArgs e)
         {
             //
@@ -2665,6 +2715,7 @@ namespace FCT_FACTORY
             if (textBox2.Text.Contains("EMERG ON"))
             {
                 timer1.Stop();
+                timer5.Stop();
                 timer3.Stop();
                 timer4.Start();
                 textBox2.Text = "";
