@@ -55,8 +55,8 @@ namespace FCT_FACTORY
         //////////////////////////////
 
         //Int//
-        int[] ModeloP = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
-        int[] ModeloQF = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
+        int[] ModeloP = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 , 13 };
+        int[] ModeloQF = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 , 13 ,   };
         int linhasTotal = 0;
         int indexTest2 = 0;
         int indexTest = 0;
@@ -73,7 +73,9 @@ namespace FCT_FACTORY
 
 
 
+
         //String//
+       
         string testeStatus = "FAIL";
         string testeStatus2 = "FAIL";
         string naoFazteste2;
@@ -249,6 +251,9 @@ namespace FCT_FACTORY
                 limits[11] = double.Parse(_myIni.Read("discharge_min2", "dataBase"));
                 v_discharge2 = double.Parse(_myIni.Read("discharge_max2", "dataBase"));
 
+                limits[12] = double.Parse(_myIni.Read("discharge_min2", "dataBase"));
+               
+
                 naoFazTeste1 = _myIni.Read("testplaca1", "dataBase");
 
                 naoFazteste2 = _myIni.Read("testplaca2", "dataBase");
@@ -282,15 +287,18 @@ namespace FCT_FACTORY
                 linhasTotal = 13;
                 for (int i = 0; i < linhasTotal; i++)
                 {
-                    dataGridView1.Rows.Add();
+                    if (dataGridView1.Rows.Count <= i)
+                    {
+                        dataGridView1.Rows.Add(); 
+                    }
 
                     if (naoFazTeste1 == "NaoFazTeste")
                     {
                         dataGridView1.Rows[i].DefaultCellStyle.BackColor = Color.Red;
                     }
-
                 }
             }
+
 
             if (modeloPassando == "model_padrao")
             {
@@ -380,6 +388,7 @@ namespace FCT_FACTORY
                 dataGridView1.Rows[10].Cells[2].Value = limits[11] + " a " + v_discharge2;
 
                 dataGridView1.Rows[11].Cells[0].Value = "FINISHED";
+               
 
             }
 
@@ -449,7 +458,7 @@ namespace FCT_FACTORY
                 dataGridView1.Rows[7].Cells[0].Value = "TEMPERATURE 3";
                 dataGridView1.Rows[7].Cells[2].Value = limits[7] + " a " + v_temperature3;
 
-                dataGridView1.Rows[8].Cells[0].Value = "MOTOR";
+                dataGridView1.Rows[8].Cells[0].Value = "MOTOR"; 
                 dataGridView1.Rows[8].Cells[2].Value = limits[8] + " a " + v_motor;
 
                 dataGridView1.Rows[9].Cells[0].Value = "CONDENSER";
@@ -508,38 +517,7 @@ namespace FCT_FACTORY
 
             //INACABADO AINDA
 
-            for (int i = 0; i < 3; i++)
-            {
-                for (int j = 0; j < 10; j++) // Corrigido para j++
-                {
-                    TESTS2[i, j] = "NULL";
-                }
-            }
-
-
-            defineLimitsMinMax();
-            textBox4.Text = UserName;
-            richTextBox1.Enabled = false;
-            button1.Focus();
-
-            try
-            {
-                if (!serialPort1.IsOpen)
-                {
-                    serialPort1.Open();
-                    timer3.Start();
-                }
-            }
-            catch (Exception)
-            {
-                fail = true;
-
-                textBox7.BackColor = Color.Red;
-                textBox7.Text = "SERIAL POR FAIL";
-
-                textBox7.Visible = true;
-
-            }
+            
 
 
 
@@ -548,7 +526,7 @@ namespace FCT_FACTORY
             for (int i = 0; i < 3; i++)
             {
 
-                for (int j = 0; j < 10; j++)
+                for (int j = 0; j < 11; j++)
                 {
 
                     TESTS[i, j] = "NULL";
@@ -601,6 +579,11 @@ namespace FCT_FACTORY
             if (modeloPassando == "model_padrao" && modeloPassando2 == "model_quenteFrio")
             {
                 this.Text = "Software - Version: " + versao.ToString() + " - Modelo | Padrao | Quente-frio";
+            }
+
+            if(modeloPassando == "model_quenteFrio" && modeloPassando2 == "model_padrao")
+            {
+               this.Text = "Software - Version: " + versao.ToString() + " - Modelo |  Quente-frio | Padrao |";
             }
         }
 
@@ -776,11 +759,13 @@ namespace FCT_FACTORY
             //DISCHARGE 2
             limitsMin[11] = limits[11];
             limitsMax[11] = v_discharge2;
+
+
         }
 
         // bool statusPassOrFail = false;
 
-        private bool checkTest(int position, double value, String Valor)
+        private bool checkTest(int position, double value, string Valor)
         {
             bool statusPassOrFail;
             value = value / 100;
@@ -886,6 +871,7 @@ namespace FCT_FACTORY
 
                             if (modeloPassando == "model_quenteFrio")
                             {
+
                                 resultadoDoCheck = checkTest(ModeloQF[indexTest], double.Parse(dados[2]), dados[2]);
 
                             }
@@ -908,7 +894,7 @@ namespace FCT_FACTORY
                                 else if (indexTest == 2 || indexTest == 8) { TESTS[1, indexTest] = dados[2]; }   //TEST EFICIENCIA 100 e 230AC
                                 else
                                 {
-                                    TESTS[1, indexTest] = dados[1] + "VAC, " + dados[2] + "VDC, " + dados[3] + "A";
+                                    //TESTS[1, indexTest] = dados[1] + "VAC, " + dados[2] + "VDC, " + dados[3] + "A";
                                 }
 
                                 statusTest = "PASS";
@@ -992,6 +978,7 @@ namespace FCT_FACTORY
                     {
                         serialPort1.Write("12");
                         timer1.Stop();
+                        
                         endTimer();
                         textBox6.Visible = true;
                         textBox6.Text = "PASS - " + fim;
@@ -1974,8 +1961,15 @@ namespace FCT_FACTORY
                 }
                 else
                 {
-                    timer1.Start();
-                    timer5.Start();
+                    if(naoFazTeste1 != "NaoFazTeste")
+                    {
+                        timer1.Start();
+                    }
+                    if(naoFazteste2 != "NaoFazTeste")
+                    {
+                        timer5.Start();
+                    }
+                       
                 }
 
 
@@ -2363,16 +2357,16 @@ namespace FCT_FACTORY
                         if (resultadoDoCheck)
                         {
                             //TESTE CURTO CIRCUITO
-                            if (indexTest == 0)
+                            if (indexTest2 == 0)
                             {
                                 TESTS2[1, indexTest2] = "APROVADO";
-                                temp_ini = double.Parse(dados2[2]);
-                                temp_ini = temp_ini / 100;
+                                temp_ini2 = double.Parse(dados2[2]);
+                                temp_ini2 = temp_ini / 100;
                             }
                             else if (indexTest2 == 2 || indexTest2 == 8) { TESTS2[1, indexTest2] = dados2[2]; }   //TEST EFICIENCIA 100 e 230AC
                             else
                             {
-                                TESTS[1, indexTest] = dados2[1] + "VAC, " + dados2[2] + "VDC, " + dados2[3] + "A";
+                                //TESTS[1, indexTest2] = dados2[1] + "VAC, " + dados2[2] + "VDC, " + dados2[3] + "A";
                             }
 
                             statusTest = "PASS";
@@ -2416,35 +2410,35 @@ namespace FCT_FACTORY
                         else
                         {
                             //TESTE CURTO CIRCUITO
-                            if (indexTest == 0) { TESTS[1, indexTest] = "FALHA"; }
-                            else if (indexTest == 2 || indexTest == 8) { TESTS[1, indexTest] = dados2[2]; }   //TEST EFICIENCIA 100 e 230AC
+                            if (indexTest2 == 0) { TESTS2[1, indexTest] = "FALHA"; }
+                            else if (indexTest2 == 2 || indexTest2 == 8) { TESTS[1, indexTest2] = dados2[2]; }   //TEST EFICIENCIA 100 e 230AC
                             else
                             {
-                                TESTS[1, indexTest] = dados2[1] + "VAC, " + dados2[2] + "VDC, " + dados2[3] + "A";
+                                // TESTS2[1, indexTest2] = dados2[1] + "VAC, " + dados2[2] + "VDC, " + dados2[3] + "A";
                             }
 
                             dataGridView2.DefaultCellStyle.SelectionForeColor = Color.Red;
                             textBox7.Visible = true;
                             textBox7.Text = "FAIL";
                             textBox7.BackColor = Color.Red;
-                            timer1.Stop();
+                            timer5.Stop();
 
                             inicio = false;
 
-                            statusTest = "FAIL";
-                            dataGridView2.Rows[indexTest].Cells[1].Value = dados2[1];
-                            dataGridView2.Rows[indexTest].Cells[3].Value = dados2[2];
-                            dataGridView2.Rows[indexTest].Cells[4].Value = statusTest;
+                            statusTest2 = "FAIL";
+                            dataGridView2.Rows[indexTest2].Cells[1].Value = dados2[1];
+                            dataGridView2.Rows[indexTest2].Cells[3].Value = dados2[2];
+                            dataGridView2.Rows[indexTest2].Cells[4].Value = statusTest2;
 
-                            button1.Text = "O Teste: " + " | " + indexTest.ToString() + " | " + "Falhou";
+                            button1.Text = "O Teste: " + " | " + indexTest2.ToString() + " | " + "Falhou";
 
-                            createLogs(1);
+                            createLogs2(1);
 
                             if (trackingTest)
                             {
                                 if (_mode == "txt")
                                 {
-                                    createLogs(1);
+                                    createLogs2(1);
                                 }
                             }
                         }
@@ -2726,7 +2720,7 @@ namespace FCT_FACTORY
 
         }
 
-        private void createLogs2(int testNumber)
+        private void createLogs2(int testNumber2)
         {
             try
             {
@@ -2743,7 +2737,7 @@ namespace FCT_FACTORY
 
                 if (modeloPassando2 == "model_padrao")
                 {
-                    if (testNumber == 1)
+                    if (testNumber2 == 1)
                     {
                         msg = snum
                             + "DataTestx:" + DateTime.Now
@@ -2753,21 +2747,21 @@ namespace FCT_FACTORY
                         serialRead = snum;
                     }
 
-                    msg += ";SHORT_AC[" + TESTS2[testNumber, 1] + "]"
-                           + ";VOLTAGE_3_3v[" + TESTS2[testNumber, 2] + "]"
-                           + ";VOLTAGE_12v_15v[" + TESTS2[testNumber, 3] + "]"
-                           + ";CURRENT_AC[" + TESTS2[testNumber, 4] + "]"
-                           + ";TEMPERATURE_1[" + TESTS2[testNumber, 5] + "]"
-                           + ";TEMPERATURE_2[" + TESTS2[testNumber, 6] + "]"
-                           + ";TEMPERATURE_3[" + TESTS2[testNumber, 7] + "]"
-                           + ";MOTOR[" + TESTS2[testNumber, 8] + "]"
-                           + ";CONDENSER[" + TESTS2[testNumber, 9] + "]"
-                           + ";CHECK_OUT[" + TESTS2[testNumber, 10] + "]\n";
+                    msg += ";SHORT_AC[" + TESTS2[testNumber2, 1] + "]"
+                           + ";VOLTAGE_3_3v[" + TESTS2[testNumber2, 2] + "]"
+                           + ";VOLTAGE_12v_15v[" + TESTS2[testNumber2, 3] + "]"
+                           + ";CURRENT_AC[" + TESTS2[testNumber2, 4] + "]"
+                           + ";TEMPERATURE_1[" + TESTS2[testNumber2, 5] + "]"
+                           + ";TEMPERATURE_2[" + TESTS2[testNumber2, 6] + "]"
+                           + ";TEMPERATURE_3[" + TESTS2[testNumber2, 7] + "]"
+                           + ";MOTOR[" + TESTS2[testNumber2, 8] + "]"
+                           + ";CONDENSER[" + TESTS2[testNumber2, 9] + "]"
+                           + ";CHECK_OUT[" + TESTS2[testNumber2, 10] + "]\n";
                 }
 
                 if (modeloPassando2 == "model_quenteFrio")
                 {
-                    if (testNumber == 1)
+                    if (testNumber2 == 1)
                     {
                         msg = snum
                             + "DataTestx:" + DateTime.Now
@@ -2777,17 +2771,17 @@ namespace FCT_FACTORY
                         serialRead = snum;
                     }
 
-                    msg += ";SHORT_AC[" + TESTS2[testNumber, 1] + "]"
-                           + ";VOLTAGE_3_3v[" + TESTS2[testNumber, 2] + "]"
-                           + ";VOLTAGE_12v_15v[" + TESTS2[testNumber, 3] + "]"
-                           + ";CURRENT_AC[" + TESTS2[testNumber, 4] + "]"
-                           + ";TEMPERATURE_1[" + TESTS2[testNumber, 5] + "]"
-                           + ";TEMPERATURE_2[" + TESTS2[testNumber, 6] + "]"
-                           + ";TEMPERATURE_3[" + TESTS2[testNumber, 7] + "]"
-                           + ";MOTOR[" + TESTS2[testNumber, 8] + "]"
-                           + ";CONDENSER[" + TESTS2[testNumber, 9] + "]"
-                           + ";INVERTER[" + TESTS2[testNumber, 10] + "]"
-                           + ";CHECK_OUT[" + TESTS2[testNumber, 11] + "]\n";
+                    msg += ";SHORT_AC[" + TESTS2[testNumber2, 1] + "]"
+                           + ";VOLTAGE_3_3v[" + TESTS2[testNumber2, 2] + "]"
+                           + ";VOLTAGE_12v_15v[" + TESTS2[testNumber2, 3] + "]"
+                           + ";CURRENT_AC[" + TESTS2[testNumber2, 4] + "]"
+                           + ";TEMPERATURE_1[" + TESTS2[testNumber2, 5] + "]"
+                           + ";TEMPERATURE_2[" + TESTS2[testNumber2, 6] + "]"
+                           + ";TEMPERATURE_3[" + TESTS2[testNumber2, 7] + "]"
+                           + ";MOTOR[" + TESTS2[testNumber2, 8] + "]"
+                           + ";CONDENSER[" + TESTS2[testNumber2, 9] + "]"
+                           + ";INVERTER[" + TESTS2[testNumber2, 10] + "]"
+                           + ";CHECK_OUT[" + TESTS2[testNumber2, 11] + "]\n";
                 }
 
                 using (StreamWriter writer = new StreamWriter(directory + namePath + ".txt", true))
