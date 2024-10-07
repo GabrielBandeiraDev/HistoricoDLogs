@@ -11,20 +11,14 @@ namespace ODU_JIG
 {
     public partial class formPrincipal : Form
     {
+        //dataGRID2
         string rxData2;
         string recebeTempoDoTeste2;
         string statusDoTeste2;
         string valorDosIntervalos2;
         int IndexLinhaAtual2 = -1;
-        int verdeClaro2 = 0;
-        int dados_aprovado2 = 0;
-        List<TimeSpan> temposDosTestes2 = new List<TimeSpan>();
-        Stopwatch cronometro2 = new Stopwatch();
-        Stopwatch tempoParadoCronometro2 = new Stopwatch();
-        Timer cronometroTimer2 = new Timer();
-        DateTime tempoInicioTeste2;
-        DateTime inicioTempoParado2;
-        DateTime fimTempoParado2;
+
+
 
 
 
@@ -34,12 +28,24 @@ namespace ODU_JIG
         string statusDoTeste;
         string valorDosIntervalos;
         bool AlteraCor = false;
+
         const int DelayPadraoPorLinha = 250;
+
+
+
         int IndexLinhaAtual = -1;
         int verdeClaro = 0;
         int dados_aprovado = 0;
+
+
         string caminhoConnect = Application.StartupPath.ToString() + "/Connection.ini";
         string script = Application.StartupPath.ToString() + "/Script.txt";
+
+        //PASTA DOS SCRIPTS
+        string script2 = Path.Combine(Application.StartupPath, "Scripts", "Scriptando.txt");
+
+
+
         Stopwatch tempoParadoCronometro = new Stopwatch();
         Stopwatch cronometro = new Stopwatch();
         Timer cronometroTimer = new Timer();
@@ -106,6 +112,12 @@ namespace ODU_JIG
                                     {
                                         dataGridView1.Rows[IndexLinhaAtual].Cells[1].Value = minRange;
                                         dataGridView1.Rows[IndexLinhaAtual].Cells[2].Value = maxRange;
+
+                                    }//DataGrid2
+                                    if (IndexLinhaAtual2 >= 0 && IndexLinhaAtual2 < dataGridView2.Rows.Count)
+                                    {
+                                        dataGridView2.Rows[IndexLinhaAtual2].Cells[1].Value = minRange;
+                                        dataGridView2.Rows[IndexLinhaAtual2].Cells[2].Value = maxRange;
                                     }
                                 }
                             }
@@ -220,6 +232,8 @@ namespace ODU_JIG
         {
             inicioTempoParado = DateTime.Now;
             tempoParadoCronometro.Start();
+           
+        
 
             if (Directory.Exists("/home"))
             {
@@ -265,7 +279,7 @@ namespace ODU_JIG
 
             richTextBox3.LoadFile(script, RichTextBoxStreamType.PlainText);
             valores_iniciarDaGrid();
-            valores_iniciarDaGrid2(); // Grid2
+            valores_iniciarDaGrid2(); // Grid2a
         }
 
         //Função para inciar os valores de cmdMSG (descrição) e cmdENV (ranges)
@@ -331,11 +345,14 @@ namespace ODU_JIG
             }
         }
 
+
+
+
         private void valores_iniciarDaGrid2() // DataGrid2 
         {
             int indexDaLinha2 = 0; // Index 2 
 
-            using (StreamReader sr = new StreamReader(script))
+            using (StreamReader sr = new StreamReader(script2))
             {
                 string descricaoDoTeste2 = null;
                 string linha2;
@@ -343,7 +360,7 @@ namespace ODU_JIG
                 {
                     if (!string.IsNullOrWhiteSpace(linha2))
                     {
-                        //Tudo que estiver no cmdMSG vai iniciar na coluna 0 do dataGrid1
+                        //Tudo que estiver no cmdMSG vai iniciar na coluna 0 do dataGrid2
                         if (linha2.StartsWith("cmdMSG"))
                         {
                             //faz o split por TAB
@@ -392,11 +409,6 @@ namespace ODU_JIG
                 }
             }
         }
-
-
-
-
-
 
 
 
