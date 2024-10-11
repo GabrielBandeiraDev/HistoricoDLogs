@@ -46,34 +46,36 @@ Bem-vindo ao **Sistema de Gestão de Logs**! Esta aplicação web foi desenvolvi
    git clone https://github.com/seu-usuario/seu-repositorio.git
    cd seu-repositorio
 
-instale as dependências: Para o backend:
+## instale as dependências: 
+
+## Para o backend:
 cd backend
 npm install
 
-Para o frontend:
+## Para o frontend:
 cd frontend
 npm install
 
-Configuração do ambiente: Crie um arquivo .env na raiz do projeto e adicione as seguintes variáveis:
+## Configuração do ambiente: Crie um arquivo .env na raiz do projeto e adicione as seguintes variáveis:
 
 bash
 
-PORT=3000
-DB_URI=mongodb://localhost:27017/seu-banco
+## PORT=3000
+## DB_URI=mongodb://localhost:27017/seu-banco
 
 
 
-Configuração do Servidor
+## Configuração do Servidor
 A comunicação entre a aplicação frontend e o servidor Express é realizada através de chamadas API RESTful. Certifique-se de que o servidor esteja rodando e acessível na URL configurada (padrão: http://localhost:3000).
 
-Uso da Aplicação
+## Uso da Aplicação
 Acesse a aplicação: Abra o navegador e digite http://localhost:3000.
 Carregue os Logs: A aplicação buscará automaticamente os logs em formato JSON do servidor.
 Filtre e Analise: Use as opções de filtragem para restringir os resultados conforme necessário.
 Exportação: Utilize a funcionalidade de exportação para salvar os logs em um formato desejado.
 
 
-Estrutura dos Dados
+## Estrutura dos Dados
 
 
 Os logs são recebidos em formato JSON e seguem a seguinte estrutura:
@@ -106,5 +108,5 @@ Este projeto está licenciado sob a MIT License. Consulte o arquivo LICENSE para
 Contato
 Para dúvidas ou sugestões, entre em contato:
 
-Email: gabriel_bandeira2013@hotmail.com
-GitHub: GabrielbandeiraDev
+## Email: gabriel_bandeira2013@hotmail.com
+## GitHub: GabrielbandeiraDev
