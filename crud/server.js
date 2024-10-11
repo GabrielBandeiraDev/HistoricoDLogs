@@ -4,20 +4,27 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.argv[2] || 3000; 
+const HOST = process.argv[3] || '26.56.236.130'; 
 
 // Middleware para parsear JSON
 app.use(bodyParser.json());
 
+// Servir arquivos estáticos
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Rota para servir o HTML
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html')); 
+});
+
 // Rota para receber logs
 app.post('/api/logs', (req, res) => {
     const logs = req.body;
-
     const filePath = path.join(__dirname, 'logs.json');
 
     fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
-            // Cria o arquivo se não existir
             fs.writeFile(filePath, JSON.stringify([], null, 2), (err) => {
                 if (err) {
                     console.error('Erro ao criar o arquivo de logs:', err);
@@ -28,7 +35,7 @@ app.post('/api/logs', (req, res) => {
         } else {
             try {
                 const existingLogs = JSON.parse(data || '[]');
-                existingLogs.push(...logs); // Adiciona os novos logs
+                existingLogs.push(...logs);
 
                 fs.writeFile(filePath, JSON.stringify(existingLogs, null, 2), (err) => {
                     if (err) {
@@ -53,7 +60,7 @@ app.get('/api/logs', (req, res) => {
         if (err) {
             console.error('Erro ao ler o arquivo de logs:', err);
             return res.status(500).send('Erro ao ler o arquivo de logs.');
-        }
+        } 
 
         const logs = JSON.parse(data || '[]');
         res.json(logs);
@@ -61,6 +68,6 @@ app.get('/api/logs', (req, res) => {
 });
 
 // Iniciar o servidor
-app.listen(PORT, () => {
-    console.log(`Servidor rodando na porta ${PORT}`);
+app.listen(PORT, HOST, () => {
+    console.log(`Servidor rodando em http://${HOST}:${PORT}`);
 });
