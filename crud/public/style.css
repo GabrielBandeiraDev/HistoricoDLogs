@@ -1,0 +1,157 @@
+body {
+    background-color: #f4f4f4;
+    text-align: center;
+}
+
+header {
+    background-color: #003B5C;
+    color: #fff;
+    padding: 20px;
+}
+
+h1, h2 {
+    margin: 0;
+}
+
+.container {
+    margin-top: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+th {
+    background-color: #0076A8;
+    color: #fff;
+}
+
+tr:hover {
+    background-color: #e9ecef;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+.alert {
+    display: none;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 600px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.filter-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+select, input[type="date"], button {
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+select:focus, input[type="date"]:focus, button:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+#historico, #ultimoRelatorio {
+    padding: 15px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    margin: 10px;
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+#ultimoRelatorio h2 {
+    margin-top: 0;
+    color: #333;
+}
+
+.log-box {
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 15px;
+    color: #fff; 
+    font-size: 14px;
+    transition: transform 0.3s ease;
+}
+
+.log-box:hover {
+    transform: scale(1.02);
+}
+
+.log-box-0 { background-color: #007bff; }
+.log-box-1 { background-color: #28a745; }
+.log-box-2 { background-color: #dc3545; }
+.log-box-3 { background-color: #ffc107; }
+.log-box-4 { background-color: #17a2b8; }
+
+@media (max-width: 600px) {
+    .container {
+        flex-direction: column;
+    }
+
+    #historico, #ultimoRelatorio {
+        margin: 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
