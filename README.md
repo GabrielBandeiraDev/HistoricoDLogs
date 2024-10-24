@@ -1,47 +1,50 @@
-# 📜 README - Sistema de Gestão de Logs
+# Sistema de Gestão de Logs
 
-## Introdução
+## 🖥️ Introdução
+Bem-vindo ao Sistema de Gestão de Logs! Este sistema foi desenvolvido para oferecer uma interface web intuitiva e eficiente, destinada à visualização, análise e gerenciamento de logs gerados por um servidor Express. A ferramenta permite ao usuário acessar e manipular logs em formato JSON de maneira simples e rápida.
 
-Bem-vindo ao **Sistema de Gestão de Logs**! Esta aplicação web foi desenvolvida para facilitar a visualização e análise de logs gerados por um software de servidor baseado em Express. O objetivo principal é fornecer uma interface amigável que permite ao usuário acessar, filtrar e analisar logs em formato JSON recebidos de um servidor.
+## 📑 Índice
+- Recursos
+- Tecnologias Utilizadas
+- Instalação
+- Configuração do Servidor
+- Uso da Aplicação
+- Estrutura dos Dados
+- Contribuição
+- Licença
+- Contato
+- Imagem do Sistema
 
-## Índice
+## 🚀 Recursos
+- Visualização de Logs: Interface amigável para exibir logs em tempo real.
+- Filtragem e Pesquisa: Busca eficiente por data, severidade e palavras-chave nos logs.
+- Exportação de Dados: Logs podem ser exportados para CSV ou JSON para análises externas.
+- Responsividade: Design adaptável para dispositivos móveis e desktops, garantindo acessibilidade em diferentes plataformas.
 
-- [Recursos](#recursos)
-- [Tecnologias Utilizadas](#tecnologias-utilizadas)
-- [Instalação](#instalação)
-- [Configuração do Servidor](#configuração-do-servidor)
-- [Uso da Aplicação](#uso-da-aplicação)
-- [Estrutura dos Dados](#estrutura-dos-dados)
-- [Contribuição](#contribuição)
-- [Licença](#licença)
-- [Contato](#contato)
+## 🛠️ Tecnologias Utilizadas
+### Frontend:
+- HTML, CSS e JavaScript
+- Framework: React.js (ou similar)
 
-## Recursos
+### Backend:
+- Node.js e Express
+- Middleware para manipulação de JSON
 
-- **Visualização de Logs:** Interface intuitiva para visualizar logs em tempo real.
-- **Filtragem e Pesquisa:** Funcionalidade de busca para filtrar logs por data, nível de severidade e palavras-chave.
-- **Exportação de Dados:** Opção para exportar logs em formato CSV ou JSON para análises externas.
-- **Interface Responsiva:** Design que se adapta a diferentes tamanhos de tela, tornando a aplicação acessível em dispositivos móveis e desktops.
+### Banco de Dados:
+- MongoDB (ou outro banco de dados de sua escolha)
 
-## Tecnologias Utilizadas
+## ⚙️ Instalação
+Clone o repositório:
 
-- **Frontend:**
-  - HTML
-  - CSS
-  - JavaScript
-  - Frameworks: React.js (ou outro de sua escolha)
+```bash
+git clone https://github.com/seu-usuario/sistema-gestao-logs.git
 
-- **Backend:**
-  - Node.js
-  - Express
-  - Middleware para manipulação de JSON
+Navegue até o diretório:
 
-- **Banco de Dados:**
-  - MongoDB (ou outro banco de dados de sua escolha, se aplicável)
+cd sistema-gestao-logs
+
+Instale as dependências:
+
+npm install
 
 
-Contato
-Para dúvidas ou sugestões, entre em contato:
-
-## Email: gabriel_bandeira2013@hotmail.com
-## GitHub: GabrielbandeiraDev
