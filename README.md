@@ -37,14 +37,70 @@ Bem-vindo ao Sistema de Gestão de Logs! Este sistema foi desenvolvido para ofer
 Clone o repositório:
 
 ```bash
-git clone https://github.com/seu-usuario/sistema-gestao-logs.git
+git clone https://github.com/gabrielbandeiradev/sistema-gestao-logs.git
 
-Navegue até o diretório:
+
+## Navegue até o diretório:
 
 cd sistema-gestao-logs
 
-Instale as dependências:
+## Instale as dependências:
 
 npm install
+
+🖧 Configuração do Servidor
+Configure as variáveis de ambiente no arquivo .env (exemplo fornecido no .env.example).
+
+Execute o servidor:
+
+node server.js
+
+📝 Uso da Aplicação
+Após iniciar o servidor, a interface web estará disponível no navegador no endereço configurado (por padrão: http://localhost:3000).
+
+Utilize as opções de busca e filtragem para navegar pelos logs.
+Exporte logs para análise externa utilizando os botões de exportação.
+
+📂 Estrutura dos Dados
+
+Os logs são estruturados em JSON com os seguintes campos principais:
+
+timestamp: Data e hora do log.
+severity: Nível de severidade (Ex: INFO, ERROR, WARN).
+message: Mensagem descritiva do evento.
+metadata: Informações adicionais relacionadas ao evento (opcional).
+
+🤝 Contribuição
+Contribuições são bem-vindas! Siga os seguintes passos para contribuir:
+
+Fork o projeto.
+
+Crie uma nova branch:
+
+git checkout -b minha-feature
+
+
+Faça suas alterações e commit:
+
+git commit -m "Adicionei uma nova feature"
+
+Envie suas alterações:
+
+git push origin minha-feature
+
+
+📄 Licença
+Este projeto está sob a licença MIT. Consulte o arquivo LICENSE para mais detalhes.
+
+📧 Contato
+Para dúvidas ou sugestões, entre em contato:
+
+Email: gabriel_bandeira2013@hotmail.com
+GitHub: GabrielbandeiraDev
+
+
+🖼️ Imagem do Sistema
+
+
 
 
