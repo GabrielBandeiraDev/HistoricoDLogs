@@ -24,7 +24,7 @@ Bem-vindo ao Sistema de Gestão de Logs! Este sistema foi desenvolvido para ofer
 ## 🛠️ Tecnologias Utilizadas
 ### Frontend:
 - HTML, CSS e JavaScript
-- Framework: React.js (ou similar)
+- Bootstrap
 
 ### Backend:
 - Node.js e Express
