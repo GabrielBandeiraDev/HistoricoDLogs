@@ -98,9 +98,3 @@ Para dúvidas ou sugestões, entre em contato:
 Email: gabriel_bandeira2013@hotmail.com
 GitHub: GabrielbandeiraDev
 
-
-🖼️ Imagem do Sistema
-
-
-
-
