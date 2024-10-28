@@ -40,18 +40,38 @@
     </header>
 
     <div class="filter-container">
+        <!-- Filtro de Modelos -->
+        <select id="filterModelo">
+            <option value="">Todos os Modelos</option>
+            <option value="Modelo1">Modelo 1</option>
+            <option value="Modelo2">Modelo 2</option>
+            <option value="Modelo3">Modelo 3</option>
+        </select>
+    
+        <!-- Filtro de Resultados -->
         <select id="filterResultado">
             <option value="">Todos os Resultados</option>
-            <option value="Aprovado"><strong>Aprovados</strong></option>
+            <option value="Aprovado">Aprovados</option>
             <option value="Reprovado">Reprovados</option>
         </select>
+    
+        <!-- Filtro de Data -->
         <input type="date" id="filterData">
+    
+        <!-- Botão de Filtrar -->
         <button id="filterButton">Filtrar</button>
+        
+        <!-- Botão de Histórico -->
         <button id="loadHistorico">Histórico</button>
+        
+        <!-- Botão de Atualizar -->
         <button id="refreshButton">
             <i class="fa fa-refresh" id="icon"></i>
         </button>
     </div>
+    
+
+
 
     <div id="historicoContainer" style="display: none;">
         <div class="flex-container">
@@ -64,7 +84,7 @@
                     </div>
                 </div>
                 <div class="ultimo-relatorio">
-                    <h5>Últimos Testes</h5>
+                    <h5><strong>Últimos Testes</strong></h5>
                     <div id="ultimoRelatorioContent">Nenhum relatório disponível.</div>
                 </div>
             </div>
@@ -89,15 +109,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
     <script>
-        document.getElementById('refreshButton').addEventListener('click', function() {
-            const icon = document.getElementById('icon');
-            icon.classList.toggle('spin');
-            
-            // Remover a classe após 1 segundo (opcional)
-            setTimeout(() => {
-                icon.classList.remove('spin');
-            }, 1000); // 1 segundo
-        });
+       
     </script>
 
 </body>
