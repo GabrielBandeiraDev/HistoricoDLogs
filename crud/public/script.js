@@ -19,6 +19,10 @@ function atualizarContagem() {
     document.getElementById('rejectedCount').textContent = `${reprovados}`;
 }
 
+
+
+
+
 function atualizarGrafico(aprovados, reprovados) {
     const ctx = document.getElementById('pieChart').getContext('2d');
 
@@ -82,7 +86,7 @@ function mostrarHistorico() {
     const historicoReprovadosDiv = document.getElementById('historico-reprovados');
     const filtroResultado = document.getElementById('filterResultado').value;
     const filtroModelo = parseInt(document.getElementById('filterModelo').value, 10); // Converte para número
-    const filtroData = document.getElementById('filterData').value;
+    const filtroData = document.getElementById('filterData').value; // Captura a data do filtro
 
     // Limpar as divs de histórico
     historicoAprovadosDiv.innerHTML = '';
@@ -91,21 +95,34 @@ function mostrarHistorico() {
     // Verificar se há logs que correspondem aos filtros
     let logsEncontrados = false;
 
-    allLogs.forEach((log) => {
-        const logDate = new Date(log.DataHora).toISOString().split('T')[0];
-        const isDateMatch = !filtroData || logDate === filtroData;
-        const isModeloMatch = isNaN(filtroModelo) || log.Modelo === filtroModelo; // Verifica se é NaN
-        const isResultadoMatch = !filtroResultado || log.Resultado === filtroResultado;
+    // Formatar a data do filtro, se fornecida
+    let filtroDataFormatada;
+    if (filtroData) {
+        filtroDataFormatada = new Date(filtroData).toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    }
 
-        // Se o log não atender a todos os filtros, pular para o próximo log
-        if (!(isDateMatch && isModeloMatch && isResultadoMatch)) {
-            return;
-        }
+    // Filtrar logs de acordo com os critérios
+    const logsFiltrados = allLogs.filter(log => {
+        const logDate = new Date(log.DataHora).toISOString().split('T')[0]; // Formato YYYY-MM-DD
+        const isDateMatch = !filtroData || logDate === filtroDataFormatada; // Verifica se a data do log corresponde ao filtro
+        const isModeloMatch = isNaN(filtroModelo) || log.Modelo === filtroModelo; // Verifica se o modelo corresponde ao filtro
+        const isResultadoMatch = !filtroResultado || log.Resultado === filtroResultado; // Verifica se o resultado corresponde ao filtro
 
-        // Marcar que encontramos pelo menos um log
-        logsEncontrados = true;
+        return isDateMatch && isModeloMatch && isResultadoMatch; // Retorna verdadeiro se atender todos os filtros
+    });
 
-        // Criar o elemento de log
+    // Atualizar contagens e exibir logs filtrados
+    const aprovados = logsFiltrados.filter(log => log.Resultado === 'Aprovado').length;
+    const reprovados = logsFiltrados.filter(log => log.Resultado === 'Reprovado').length;
+
+    // Atualizar contagens na interface
+    document.getElementById('approvedCount').textContent = `${aprovados}`;
+    document.getElementById('rejectedCount').textContent = `${reprovados}`;
+
+    // Atualizar gráfico com os logs filtrados
+    atualizarGrafico(aprovados, reprovados);
+
+    logsFiltrados.forEach((log) => {
         const logElement = document.createElement('div');
         logElement.className = log.Resultado === 'Aprovado' ? 'log-box log-box-1' : 'log-box log-box-2';
         logElement.innerHTML = `<strong>ID:</strong> ${log.Id}<br>
@@ -123,15 +140,12 @@ function mostrarHistorico() {
     });
 
     // Se nenhum log foi encontrado, mostrar uma mensagem
-    if (!logsEncontrados) {
+    if (logsFiltrados.length === 0) {
         const noResultsMessage = document.createElement('p');
         noResultsMessage.textContent = 'Nenhum log encontrado para os filtros aplicados.';
         historicoAprovadosDiv.appendChild(noResultsMessage);
         historicoReprovadosDiv.appendChild(noResultsMessage.cloneNode(true));
     }
-
-    // Mensagem de depuração para verificar os filtros
-    console.log(`Filtro aplicado: Data=${filtroData}, Modelo=${filtroModelo}, Resultado=${filtroResultado}`);
 }
 
 
@@ -166,7 +180,7 @@ function carregarHistorico() {
 
             const newTimestamp = new Date(logsHoje[logsHoje.length - 1].DataHora).toISOString();
             if (lastUpdateTimestamp !== newTimestamp) {
-                allLogs = logsHoje;
+                allLogs = data;
                 mostrarHistorico();
                 atualizarContagem();
 
