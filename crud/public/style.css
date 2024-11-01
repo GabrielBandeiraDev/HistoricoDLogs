@@ -3,7 +3,20 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    
 }
+
+
+
+.container-externo {
+    margin-top: 1px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    background-color: #f4f3f3; 
+} 
+
+
 
 header {
     background-color: #004B70;
@@ -24,7 +37,7 @@ h1 {
         flex-wrap: wrap;
         margin-top: 9px;
         gap: 1px;
-        margin-left: 6cm; /* Ajusta para a direita com 1 cm */
+        margin-left: 17cm; /* Ajusta para a direita com 1 cm */
     }
     
 
@@ -36,6 +49,12 @@ select, input[type="date"], button {
     background-color: #fff;
 }
 
+
+.botaodorefresh{
+    background-color: #fff;
+}
+
+
 button {
     background-color: #003B5C;
     color: white;
@@ -46,23 +65,32 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* BOX DOS APROVADOS E REPROVADOS */
-.container {
-    margin-top: 15px;
-    /* background: #fff; */
-    border-radius: 8px;
+.flex-container {
+    display: flex; /* Define que o container é flexível */
+    justify-content: space-between; /* Espaçamento entre os containers */
+    margin-top: 15px; /* Margem acima do flex-container, se necessário */
+    gap: 15px; /* Espaço entre os containers */
+}
+
+.container1, .container2 {
+    border-radius: 18px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     padding: 15px;
     flex: 1;
     overflow: hidden;
-    border-bottom: 2px solid #ccc; /* Adiciona a linha de separação */
+    background-color: white;
+    margin-top: 10px;
+    height: 800px;
 }
+
+
+
 
 
 
 .count-box {
     display: inline-block;
-    width: 180px;
+    width: 170px;
     padding: 10px;
     border-radius: 5px;
     margin: 5px 0; /* Ajuste a margem para espaçamento vertical */
@@ -71,15 +99,52 @@ button:hover {
     font-size: 18px;
 }
 
+
+
+.count-number {
+    font-size: 24px; /* Aumenta o tamanho da fonte */
+    font-weight: bold; /* Torna o número em negrito */
+}
+
 .approved {
     background-color: #28a745;
-    padding: 40px;
+    padding: 40px; 
+    font-size: 59px; /* Tamanho do texto */
+    font-weight: bold;
+    margin-top: 4px;
 }
 
 .rejected {
     background-color: #dc3545;
-    padding: 40px;
+    padding: 40px; /* Ajusta o padding se necessário */
+    font-size: 59px;
+    font-weight: bold;
 }
+
+.texto {
+    font-size: 10px; /* Tamanho menor para o texto */
+    font-weight: bold;
+}
+
+.numero {
+    font-size: 59px; /* Tamanho maior para o número */
+    font-weight: bold;
+    margin-left: 5px; /* Espaçamento entre texto e número */
+}
+
+.texto1{
+    font-size: 10px; /* Tamanho menor para o texto */
+}
+
+.numero1 {
+    font-size: 59px; /* Tamanho maior para o número */
+    font-weight: bold;
+    margin-left: 5px; /* Espaçamento entre texto e número */
+}
+
+
+
+
 
 .flex-container {
     display: flex;
@@ -95,7 +160,7 @@ button:hover {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     flex: 1;
     margin: 10px;
-    height: 590px; /* Altura fixa para as divs */
+    height: 700px; /* Altura fixa para as divs */
      overflow-y: auto; 
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -116,6 +181,17 @@ button:hover {
 
     .log-box-1 { background-color: #28a745; }
     .log-box-2 { background-color: #dc3545; }
+
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    .spin {
+        animation: spin 1s linear; /* 1s é a duração da animação */
+    }
+    
 
 
 
@@ -171,6 +247,7 @@ button:hover {
     overflow: auto; 
     display: flex;
     flex-direction: column;
+    
 }
 
 
@@ -276,3 +353,42 @@ h2 {
 .notification-container li.success {
     background-color: #d4edda;
     color: #155724;}
+
+
+    .btn-filter {
+        background-color: #004085;
+        color: white;
+        padding: 1px 60px;
+        margin-left: 10px;
+        font-weight: bold;
+        
+    }
+    
+    .btn-filter:hover {
+        background-color: #0056b3
+    }
+    
+    .btn-historico {
+        background-color: #004085;
+        color: white;
+        padding: 1px 60px;
+        margin-left: 10px;
+        font-weight: bold;
+    }
+    
+    .btn-historico:hover {
+        background-color: #0056b3; /* Azul escuro ao passar o mouse */
+    }
+    
+    .btn-refresh {
+        background-color: #fff;
+        color: #0056b3;
+        margin-left: 108px;
+        padding: 7px 50px;
+    
+    }
+    
+    .btn-refresh:hover {
+        background-color: #e1e0de; /* Amarelo escuro ao passar o mouse */
+    }
+    
