@@ -81,18 +81,31 @@ function mostrarHistorico() {
     const historicoAprovadosDiv = document.getElementById('historico-aprovados');
     const historicoReprovadosDiv = document.getElementById('historico-reprovados');
     const filtroResultado = document.getElementById('filterResultado').value;
-    const filtroModelo = document.getElementById('filterModelo').value; // Obter o modelo selecionado
-    const filtroData = document.getElementById('filterData').value; // Obter a data selecionada
+    const filtroModelo = parseInt(document.getElementById('filterModelo').value, 10); // Converte para número
+    const filtroData = document.getElementById('filterData').value;
 
     // Limpar as divs de histórico
     historicoAprovadosDiv.innerHTML = '';
     historicoReprovadosDiv.innerHTML = '';
 
-    allLogs.forEach((log) => {
-        const logDate = new Date(log.DataHora).toISOString().split('T')[0]; // Obter apenas a parte da data
-        const isDateMatch = filtroData ? logDate === filtroData : true; // Verifica se a data é correspondente
-        const isModeloMatch = filtroModelo ? log.Modelo === filtroModelo : true; // Verifica se o modelo é correspondente
+    // Verificar se há logs que correspondem aos filtros
+    let logsEncontrados = false;
 
+    allLogs.forEach((log) => {
+        const logDate = new Date(log.DataHora).toISOString().split('T')[0];
+        const isDateMatch = !filtroData || logDate === filtroData;
+        const isModeloMatch = isNaN(filtroModelo) || log.Modelo === filtroModelo; // Verifica se é NaN
+        const isResultadoMatch = !filtroResultado || log.Resultado === filtroResultado;
+
+        // Se o log não atender a todos os filtros, pular para o próximo log
+        if (!(isDateMatch && isModeloMatch && isResultadoMatch)) {
+            return;
+        }
+
+        // Marcar que encontramos pelo menos um log
+        logsEncontrados = true;
+
+        // Criar o elemento de log
         const logElement = document.createElement('div');
         logElement.className = log.Resultado === 'Aprovado' ? 'log-box log-box-1' : 'log-box log-box-2';
         logElement.innerHTML = `<strong>ID:</strong> ${log.Id}<br>
@@ -101,22 +114,28 @@ function mostrarHistorico() {
                                 <strong>Data e Hora:</strong> ${new Date(log.DataHora).toLocaleString()}<br>
                                 <strong>Modelo:</strong> ${log.Modelo}`;
 
-        // Filtrar de acordo com a seleção de resultado, data e modelo
-        if (isDateMatch && isModeloMatch) {
-            if (filtroResultado === 'Aprovado' && log.Resultado === 'Aprovado') {
-                historicoAprovadosDiv.appendChild(logElement);
-            } else if (filtroResultado === 'Reprovado' && log.Resultado === 'Reprovado') {
-                historicoReprovadosDiv.appendChild(logElement);
-            } else if (filtroResultado === '') {
-                if (log.Resultado === 'Aprovado') {
-                    historicoAprovadosDiv.appendChild(logElement);
-                } else if (log.Resultado === 'Reprovado') {
-                    historicoReprovadosDiv.appendChild(logElement);
-                }
-            }
+        // Adicionar o log no contêiner correto com base no resultado
+        if (log.Resultado === 'Aprovado') {
+            historicoAprovadosDiv.appendChild(logElement);
+        } else if (log.Resultado === 'Reprovado') {
+            historicoReprovadosDiv.appendChild(logElement);
         }
     });
+
+    // Se nenhum log foi encontrado, mostrar uma mensagem
+    if (!logsEncontrados) {
+        const noResultsMessage = document.createElement('p');
+        noResultsMessage.textContent = 'Nenhum log encontrado para os filtros aplicados.';
+        historicoAprovadosDiv.appendChild(noResultsMessage);
+        historicoReprovadosDiv.appendChild(noResultsMessage.cloneNode(true));
+    }
+
+    // Mensagem de depuração para verificar os filtros
+    console.log(`Filtro aplicado: Data=${filtroData}, Modelo=${filtroModelo}, Resultado=${filtroResultado}`);
 }
+
+
+
 
 document.getElementById('filterButton').onclick = () => {
     mostrarHistorico();
