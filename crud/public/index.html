@@ -14,6 +14,8 @@
 </head>
 <body>
 
+
+
     <div id="notificationContainer" class="notification-container">
         <ul id="notificationList"></ul>
     </div>
@@ -38,15 +40,17 @@
     <header class="text-center">
         <h1>ACOMPANHAMENTO DE PRODUÇÃO - <strong>ELGIN</strong> </h1>
     </header>
+<div class = "container-externo">
 
     <div class="filter-container">
         <!-- Filtro de Modelos -->
         <select id="filterModelo">
             <option value="">Todos os Modelos</option>
-            <option value="Modelo1">Modelo 1</option>
-            <option value="Modelo2">Modelo 2</option>
-            <option value="Modelo3">Modelo 3</option>
+            <option value="1">Modelo 1</option>
+            <option value="2">Modelo 2</option>
+            <option value="3">Modelo 3</option>
         </select>
+        
     
         <!-- Filtro de Resultados -->
         <select id="filterResultado">
@@ -59,13 +63,13 @@
         <input type="date" id="filterData">
     
         <!-- Botão de Filtrar -->
-        <button id="filterButton">Filtrar</button>
+        <button id="filterButton" class="btn-filter">Filtrar</button>
         
         <!-- Botão de Histórico -->
-        <button id="loadHistorico">Histórico</button>
-        
+        <button id="loadHistorico" class="btn-historico">Histórico</button>
+                
         <!-- Botão de Atualizar -->
-        <button id="refreshButton">
+        <button id="refreshButton" class="btn-refresh">
             <i class="fa fa-refresh" id="icon"></i>
         </button>
     </div>
@@ -79,8 +83,25 @@
                 <div id="chartContainer">  
                     <canvas id="pieChart" width="300" height="300"></canvas>
                     <div class="count-container">
-                        <div class="count-box approved" id="approvedCount">Aprovados: 0</div>
-                        <div class="count-box rejected" id="rejectedCount">Reprovados: 0</div>
+                        
+                        <div class="count-box approved" id="approvedCount">
+                            <span class="numero"></span>
+                            <span class="texto">Total de Aprovações Dia</span>
+                            
+                        </div>
+                        
+                        
+                        
+
+
+                        <div class="count-box rejected" id="rejectedCount">
+                            <span class="numero"></span>
+                            <span class="texto">Total de Reprovações Dia</span>
+                        </div>
+                        
+
+
+
                     </div>
                 </div>
                 <div class="ultimo-relatorio">
@@ -88,19 +109,26 @@
                     <div id="ultimoRelatorioContent">Nenhum relatório disponível.</div>
                 </div>
             </div>
-            <div class="container">
+
+
+       
+        
+            <div class="container1"> 
                 <h2>Histórico - <strong>Aprovados</strong></h2>
                 <div id="historico-aprovados"></div>
             </div>
-            <div class="container">
+            <div class="container2">
                 <h2>Histórico - <strong>Reprovados</strong></h2>
                 <div id="historico-reprovados"></div>
+   
             </div>
-        </div>
-    </div>
 
+    </div>
+</div>
+
+</div>
     <footer>
-        <p>© 2024 Histórico de Teste Elgin. Todos os direitos reservados.</p>
+        <p>© 2024 Delta Sollutions - Dashboard de Produção | <strong>Elgin</strong>  </p>
     </footer>
     <script src="script.js"></script>
 
@@ -109,7 +137,44 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
     <script>
+      
+    
+        document.addEventListener("DOMContentLoaded", function() {
+    // Obtém a data atual
+    const dataAtual = new Date();
+    
+    // Formata a data no formato YYYY-MM-DD
+    const ano = dataAtual.getFullYear();
+    const mes = String(dataAtual.getMonth() + 1).padStart(2, '0'); // Meses começam do zero
+    const dia = String(dataAtual.getDate()).padStart(2, '0');
+    
+    // Define o valor do input de data
+    document.getElementById('filterData').value = `${ano}-${mes}-${dia}`;
+
+    // Adiciona evento de submit ao formulário de login
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault(); // Previne o envio do formulário
+
        
+        // Após login, aguarda 3 segundos e simula clique no botão Filtrar
+        setTimeout(() => {
+            document.getElementById('filterButton').click();
+        }, 3000); // 3 segundos
+    });
+    
+    document.getElementById('refreshButton').addEventListener('click', function() {
+        const icon = document.getElementById('icon');
+        icon.classList.toggle('spin');
+        
+        setTimeout(() => {
+            icon.classList.remove('spin');
+        }, 1000); // 1 segundo
+    });
+});
+
+
+
+         
     </script>
 
 </body>
