@@ -65,6 +65,10 @@
         <!-- Botão de Filtrar -->
         <button id="filterButton" class="btn-filter">Filtrar</button>
         
+
+
+
+        
         <!-- Botão de Histórico -->
         <button id="loadHistorico" class="btn-historico">Histórico</button>
                 
@@ -135,9 +139,52 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial@3.0.0/dist/chartjs-chart-financial.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+      
+
     
     <script>
-      
+document.getElementById('loadHistorico').addEventListener('click', function() {
+    const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+
+    // Filtra os logs do dia atual
+    const logsDoDia = allLogs.filter(log => {
+        const logDate = new Date(log.DataHora).toISOString().split('T')[0];
+        return logDate === today;
+    });
+
+    // Se não houver logs do dia, exibe uma mensagem
+    if (logsDoDia.length === 0) {
+        alert('Nenhum log encontrado para o dia atual.');
+        return;
+    }
+
+    const approvedLines = logsDoDia.filter(log => log.Resultado === 'Aprovado').length;
+    const rejectedLines = logsDoDia.filter(log => log.Resultado === 'Reprovado').length;
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(12);
+    doc.text('Histórico de Logs do Dia', 10, 10);
+    doc.text(`Total Aprovados: ${approvedLines}`, 10, 20);
+    doc.text(`Total Reprovados: ${rejectedLines}`, 10, 30);
+
+    // Adicionando os detalhes dos logs
+    let yPosition = 40; // Posição inicial para os logs
+    logsDoDia.forEach(log => {
+        doc.text(`ID: ${log.Id}, Nome: ${log.Nome}, Resultado: ${log.Resultado}, Data e Hora: ${new Date(log.DataHora).toLocaleString()}`, 10, yPosition);
+        yPosition += 10; // Aumenta a posição para a próxima linha
+    });
+
+    // Salva o PDF
+    doc.save('historico_logs.pdf');
+});
+
+    
+    
+
     
         document.addEventListener("DOMContentLoaded", function() {
     // Obtém a data atual
@@ -163,13 +210,15 @@
     });
     
     document.getElementById('refreshButton').addEventListener('click', function() {
-        const icon = document.getElementById('icon');
-        icon.classList.toggle('spin');
-        
-        setTimeout(() => {
-            icon.classList.remove('spin');
-        }, 1); // 1 segundo
-    });
+    const icon = document.getElementById('icon');
+    icon.classList.add('spin');
+
+    // Aguarda a animação antes de dar o refresh completo
+    setTimeout(() => {
+        location.reload(); // Recarrega a página completamente
+    }, 500); // meio segundo para a animação
+});
+
 });
 
 
