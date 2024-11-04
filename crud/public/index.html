@@ -159,7 +159,7 @@
         // Após login, aguarda 3 segundos e simula clique no botão Filtrar
         setTimeout(() => {
             document.getElementById('filterButton').click();
-        }, 3000); // 3 segundos
+        }, 1000); // 3 segundos
     });
     
     document.getElementById('refreshButton').addEventListener('click', function() {
@@ -168,7 +168,7 @@
         
         setTimeout(() => {
             icon.classList.remove('spin');
-        }, 1000); // 1 segundo
+        }, 1); // 1 segundo
     });
 });
 
