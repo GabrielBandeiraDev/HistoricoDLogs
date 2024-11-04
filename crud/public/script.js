@@ -167,20 +167,23 @@ function carregarHistorico() {
                 return;
             }
 
-            const currentDate = new Date().toISOString().split('T')[0];
-            const logsHoje = data.filter(log => new Date(log.DataHora).toISOString().split('T')[0] === currentDate);
+            const filtroData = document.getElementById('filterData').value; // Data selecionada pelo usuário
+            const dataSelecionada = filtroData ? new Date(filtroData).toISOString().split('T')[0] : new Date().toISOString().split('T')[0];
+            
+            // Filtra apenas os logs do dia selecionado
+            const logsDoDia = data.filter(log => new Date(log.DataHora).toISOString().split('T')[0] === dataSelecionada);
 
-            if (logsHoje.length === 0) {
+            if (logsDoDia.length === 0) {
                 allLogs = [];
                 atualizarContagem();
                 atualizarGrafico(0, 0);
-                document.getElementById('ultimoRelatorioContent').innerHTML = 'Nenhum relatório disponível para hoje.';
+                document.getElementById('ultimoRelatorioContent').innerHTML = `Nenhum relatório disponível para ${dataSelecionada}.`;
                 return;
             }
 
-            const newTimestamp = new Date(logsHoje[logsHoje.length - 1].DataHora).toISOString();
+            const newTimestamp = new Date(logsDoDia[logsDoDia.length - 1].DataHora).toISOString();
             if (lastUpdateTimestamp !== newTimestamp) {
-                allLogs = data;
+                allLogs = logsDoDia;
                 mostrarHistorico();
                 atualizarContagem();
 
@@ -190,7 +193,7 @@ function carregarHistorico() {
 
                 lastUpdateTimestamp = newTimestamp;
 
-                const logsUltimoRelatorio = logsHoje.filter(log => new Date(log.DataHora).toISOString() === lastUpdateTimestamp);
+                const logsUltimoRelatorio = logsDoDia.filter(log => new Date(log.DataHora).toISOString() === lastUpdateTimestamp);
                 const ultimoRelatorioContent = logsUltimoRelatorio.map(log => 
                     `<strong>ID:</strong> ${log.Id}<br>
                     <strong>Nome:</strong> ${log.Nome}<br>
@@ -198,13 +201,14 @@ function carregarHistorico() {
                     <strong>Data e Hora:</strong> ${new Date(log.DataHora).toLocaleString()}`
                 ).join('');
 
-                document.getElementById('ultimoRelatorioContent').innerHTML = ultimoRelatorioContent || 'Nenhum relatório disponível.';
+                document.getElementById('ultimoRelatorioContent').innerHTML = ultimoRelatorioContent || `Nenhum relatório disponível para ${dataSelecionada}.`;
             }
         })
         .catch(err => {
             console.error('Erro ao carregar o histórico:', err);
         });
 }
+
 
 document.getElementById('loadHistorico').onclick = () => {
     carregarHistorico();
