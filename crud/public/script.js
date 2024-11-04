@@ -23,6 +23,8 @@ function atualizarContagem() {
 
 
 
+
+
 function atualizarGrafico(aprovados, reprovados) {
     const ctx = document.getElementById('pieChart').getContext('2d');
 
@@ -208,6 +210,36 @@ function carregarHistorico() {
             console.error('Erro ao carregar o histórico:', err);
         });
 }
+
+
+document.getElementById('loadHistorico').onclick = () => {
+    const filtroData = document.getElementById('filterData').value || new Date().toISOString().split('T')[0];
+    const url = `/api/download-pdf?data=${filtroData}`; // Certifique-se de que a URL corresponda à sua API
+
+    // Faz uma requisição para o backend para gerar e baixar o PDF
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Erro ao gerar o PDF.');
+            }
+            return response.blob(); // Obtém o arquivo PDF como um Blob
+        })
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `historico_logs_${filtroData}.pdf`; // Nome do arquivo PDF
+            document.body.appendChild(a);
+            a.click(); // Simula o clique no link para iniciar o download
+            a.remove(); // Remove o link do DOM
+        })
+        .catch(err => {
+            console.error('Erro ao baixar o PDF:', err);
+        });
+};
+
+
+
 
 
 document.getElementById('loadHistorico').onclick = () => {
