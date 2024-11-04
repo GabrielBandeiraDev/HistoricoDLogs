@@ -18,6 +18,8 @@ body {
 
 
 
+
+
 header {
     background-color: #004B70;
     color: #fff;
@@ -275,7 +277,7 @@ button:hover {
     background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 370px;
+    height: 440px;
     overflow-y: hidden;
     flex: 1;
     color: #013f83d6;
