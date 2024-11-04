@@ -37,7 +37,7 @@ h1 {
         flex-wrap: wrap;
         margin-top: 9px;
         gap: 1px;
-        margin-left: 17cm; /* Ajusta para a direita com 1 cm */
+        margin-left: 16.7cm; /* Ajusta para a direita com 1 cm */
     }
     
 
@@ -152,7 +152,7 @@ button:hover {
     margin-top: 15px;
 }
 
-#historico-aprovados, #historico-reprovados, #ultimoRelatorioContent {
+#historico-aprovados, #historico-reprovados {
     padding: 10px;
     border: 1px solid #ccc;
     background-color: #fff;
@@ -166,6 +166,23 @@ button:hover {
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
 }
+
+#ultimoRelatorioContent{
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    margin: 10px;
+    height: 700px; /* Altura fixa para as divs */
+     overflow-y: auto; 
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    
+}
+
 
 
 .log-box {
@@ -258,11 +275,13 @@ button:hover {
     background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    height: 370px; 
-    overflow-y: hidden; 
+    height: 370px;
+    overflow-y: hidden;
     flex: 1;
-    color: #013f83d6
+    color: #013f83d6;
+    overflow: scroll;
 }
+
 
 
 main {
