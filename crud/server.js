@@ -5,7 +5,7 @@ const path = require('path');
 
 const app = express();
 const PORT = process.argv[2] || 3000; 
-const HOST = process.argv[3] || '26.56.236.130'; 
+const HOST = process.argv[3] || '26.56.236.130';  // muda isso pro teu servidor
 
 // Middleware para parsear JSON
 app.use(bodyParser.json());
