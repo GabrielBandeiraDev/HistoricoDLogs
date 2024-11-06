@@ -146,17 +146,20 @@
     
     <script>
 document.getElementById('loadHistorico').addEventListener('click', function() {
-    const today = new Date().toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    const selectedDate = document.getElementById('filterData').value;
+    
+    if (!selectedDate) {
+        alert('Por favor, selecione uma data.');
+        return;
+    }
 
-    // Filtra os logs do dia atual
     const logsDoDia = allLogs.filter(log => {
         const logDate = new Date(log.DataHora).toISOString().split('T')[0];
-        return logDate === today;
+        return logDate === selectedDate;
     });
 
-    // Se não houver logs do dia, exibe uma mensagem
     if (logsDoDia.length === 0) {
-        alert('Nenhum log encontrado para o dia atual.');
+        alert('Nenhum log encontrado para a data selecionada.');
         return;
     }
 
@@ -167,23 +170,29 @@ document.getElementById('loadHistorico').addEventListener('click', function() {
     const doc = new jsPDF();
 
     doc.setFontSize(12);
-    doc.text('Histórico de Logs do Dia', 10, 10);
+    doc.text(`Histórico de Logs - Data: ${selectedDate}`, 10, 10);
     doc.text(`Total Aprovados: ${approvedLines}`, 10, 20);
     doc.text(`Total Reprovados: ${rejectedLines}`, 10, 30);
 
-    // Adicionando os detalhes dos logs
     let yPosition = 40; // Posição inicial para os logs
-    logsDoDia.forEach(log => {
+    let pageHeight = doc.internal.pageSize.height;
+    
+    logsDoDia.forEach((log, index) => {
         doc.text(`ID: ${log.Id}, Nome: ${log.Nome}, Resultado: ${log.Resultado}, Data e Hora: ${new Date(log.DataHora).toLocaleString()}`, 10, yPosition);
-        yPosition += 10; // Aumenta a posição para a próxima linha
+        yPosition += 10;
+
+        // Se a posição Y exceder o limite da página, cria uma nova página
+        if (yPosition > pageHeight - 10) {
+            doc.addPage();
+            yPosition = 10; // Reseta a posição para o topo da nova página
+        }
     });
 
-    // Salva o PDF
-    doc.save('historico_logs.pdf');
+    // Salva o PDF com o nome contendo a data selecionada
+    doc.save(`historico_logs_${selectedDate}.pdf`);
 });
 
-    
-    
+
 
     
         document.addEventListener("DOMContentLoaded", function() {
