@@ -12,12 +12,30 @@ function stopAutoRefresh() {
 }
 
 function atualizarContagem() {
-    const aprovados = allLogs.filter(log => log.Resultado === 'Aprovado').length;
-    const reprovados = allLogs.filter(log => log.Resultado === 'Reprovado').length;
+    let aprovados = 0;
+    let reprovados = 0;
 
+    // Agrupa os logs em conjuntos de até 8 e conta cada grupo
+    for (let i = 0; i < allLogs.length; i += 8) {
+        const grupo = allLogs.slice(i, i + 8);
+
+        // Verifica se algum log do grupo tem o resultado "Reprovado"
+        const algumReprovado = grupo.some(log => log.Resultado.toUpperCase() == 'REPROVADO');
+
+        // Incrementa a contagem de grupos aprovados ou reprovados
+        if (algumReprovado) {
+            reprovados++;
+        } else {
+            aprovados++;
+        }
+    }
+
+    // Atualiza os elementos HTML com as contagens
     document.getElementById('approvedCount').textContent = `${aprovados}`;
     document.getElementById('rejectedCount').textContent = `${reprovados}`;
 }
+
+
 
 
 
@@ -83,72 +101,122 @@ document.getElementById('loginForm').onsubmit = function(e) {
     }
 };
 
+
 function mostrarHistorico() {
     const historicoAprovadosDiv = document.getElementById('historico-aprovados');
     const historicoReprovadosDiv = document.getElementById('historico-reprovados');
-    const filtroResultado = document.getElementById('filterResultado').value;
-    const filtroModelo = parseInt(document.getElementById('filterModelo').value, 10); // Converte para número
-    const filtroData = document.getElementById('filterData').value; // Captura a data do filtro
-
-    // Limpar as divs de histórico
+    
+    // Limpa o conteúdo anterior das seções de aprovados e reprovados
     historicoAprovadosDiv.innerHTML = '';
     historicoReprovadosDiv.innerHTML = '';
 
-    // Verificar se há logs que correspondem aos filtros
-    let logsEncontrados = false;
-
-    // Formatar a data do filtro, se fornecida
-    let filtroDataFormatada;
-    if (filtroData) {
-        filtroDataFormatada = new Date(filtroData).toISOString().split('T')[0]; // Formato YYYY-MM-DD
+    // Divide os logs em grupos de até 8
+    const gruposDeLogs = [];
+    for (let i = 0; i < allLogs.length; i += 8) {
+        gruposDeLogs.push(allLogs.slice(i, i + 8));
     }
 
-    // Filtrar logs de acordo com os critérios
-    const logsFiltrados = allLogs.filter(log => {
-        const logDate = new Date(log.DataHora).toISOString().split('T')[0]; // Formato YYYY-MM-DD
-        const isDateMatch = !filtroData || logDate === filtroDataFormatada; // Verifica se a data do log corresponde ao filtro
-        const isModeloMatch = isNaN(filtroModelo) || log.Modelo === filtroModelo; // Verifica se o modelo corresponde ao filtro
-        const isResultadoMatch = !filtroResultado || log.Resultado === filtroResultado; // Verifica se o resultado corresponde ao filtro
-
-        return isDateMatch && isModeloMatch && isResultadoMatch; // Retorna verdadeiro se atender todos os filtros
-    });
-
-    // Atualizar contagens e exibir logs filtrados
-    const aprovados = logsFiltrados.filter(log => log.Resultado === 'Aprovado').length;
-    const reprovados = logsFiltrados.filter(log => log.Resultado === 'Reprovado').length;
-
-    // Atualizar contagens na interface
-    document.getElementById('approvedCount').textContent = `${aprovados}`;
-    document.getElementById('rejectedCount').textContent = `${reprovados}`;
-
-    // Atualizar gráfico com os logs filtrados
-    atualizarGrafico(aprovados, reprovados);
-
-    logsFiltrados.forEach((log) => {
-        const logElement = document.createElement('div');
-        logElement.className = log.Resultado === 'Aprovado' ? 'log-box log-box-1' : 'log-box log-box-2';
-        logElement.innerHTML = `<strong>ID:</strong> ${log.Id}<br>
-                                <strong>Nome:</strong> ${log.Nome}<br>
-                                <strong>Resultado:</strong> ${log.Resultado}<br>
-                                <strong>Data e Hora:</strong> ${new Date(log.DataHora).toLocaleString()}<br>
-                                <strong>Modelo:</strong> ${log.Modelo}`;
-
-        // Adicionar o log no contêiner correto com base no resultado
-        if (log.Resultado === 'Aprovado') {
-            historicoAprovadosDiv.appendChild(logElement);
-        } else if (log.Resultado === 'Reprovado') {
-            historicoReprovadosDiv.appendChild(logElement);
+    // Cria uma log-box para cada grupo de até 8 logs
+    gruposDeLogs.forEach((grupo, index) => {
+        // Verifica se algum log no grupo está reprovado
+        const algumReprovado = grupo.some(log => log.Resultado === 'Reprovado');
+        
+        // Cria a log-box
+        const logBox = document.createElement('div');
+        logBox.className = algumReprovado ? 'log-box log-box-2' : 'log-box log-box-1';
+        
+        // Define o status geral do grupo (Aprovado ou Reprovado)
+        const statusGrupo = algumReprovado ? 'Reprovado' : 'Aprovado';
+        
+        // Usa o primeiro log do grupo como resumo para exibir as informações adicionais
+        const primeiroLog = grupo[0];
+        
+        logBox.innerHTML = `
+            <strong>ID Do Teste: ${index + 1}</strong><br>
+            <strong>Status: ${statusGrupo}</strong><br>
+            <strong>Data/Hora:</strong> ${new Date(primeiroLog.DataHora).toLocaleString()}<br>
+            <strong>Modelo:</strong> ${primeiroLog.Modelo}<br>
+            <strong>Serial:</strong> ${primeiroLog.DadosSerial || 'Não disponível'}<br>
+        `;
+    
+        // Adiciona o evento de clique para abrir o modal com detalhes
+        logBox.addEventListener('click', () => {
+            abrirModalDetalhes(grupo);
+        });
+    
+        // Adiciona a log-box na seção correta (aprovados ou reprovados)
+        if (algumReprovado) {
+            historicoReprovadosDiv.appendChild(logBox);
+        } else {
+            historicoAprovadosDiv.appendChild(logBox);
         }
     });
+}
 
-    // Se nenhum log foi encontrado, mostrar uma mensagem
-    if (logsFiltrados.length === 0) {
-        const noResultsMessage = document.createElement('p');
-        noResultsMessage.textContent = 'Nenhum log encontrado para os filtros aplicados.';
-        historicoAprovadosDiv.appendChild(noResultsMessage);
-        historicoReprovadosDiv.appendChild(noResultsMessage.cloneNode(true));
+// Função para abrir o modal com os detalhes dos logs do grupo
+function abrirModalDetalhes(grupoDeLogs) {
+    const logDetails = document.getElementById('logDetails');
+    logDetails.innerHTML = ''; // Limpa conteúdo anterior
+
+    // Adiciona os logs do grupo ao modal
+    grupoDeLogs.forEach(log => {
+        const logDetail = document.createElement('div');
+        logDetail.className = 'log-detail';
+        logDetail.innerHTML = `
+            <strong>ID:</strong> ${log.Id}<br>
+            <strong>Nome:</strong> ${log.Nome}<br>
+            <strong>Resultado:</strong> ${log.Resultado}<br>
+            <strong>Data e Hora:</strong> ${new Date(log.DataHora).toLocaleString()}<br>
+            <strong>Modelo:</strong> ${log.Modelo}<br>
+            <strong>Dados da Serial:</strong> ${log.DadosSerial || 'Não disponível'}<br>
+        `;
+        logDetails.appendChild(logDetail);
+    });
+
+    // Exibe o modal
+    document.getElementById('logModal').style.display = 'block';
+}
+
+
+
+// Fechar o modal ao clicar no botão de fechar
+document.getElementById('closeModal').onclick = function() {
+    document.getElementById('logModal').style.display = 'none';
+}
+
+// Fechar o modal ao clicar fora do conteúdo
+window.onclick = function(event) {
+    if (event.target == document.getElementById('logModal')) {
+        document.getElementById('logModal').style.display = 'none';
     }
 }
+
+
+// Fechar o modal ao clicar no botão de fechar
+document.getElementById('closeModal').onclick = function() {
+    document.getElementById('logModal').style.display = 'none';
+}
+
+// Fechar o modal ao clicar fora do conteúdo
+window.onclick = function(event) {
+    if (event.target == document.getElementById('logModal')) {
+        document.getElementById('logModal').style.display = 'none';
+    }
+}
+
+
+// Fechar o modal ao clicar no botão de fechar
+document.getElementById('closeModal').onclick = function() {
+    document.getElementById('logModal').style.display = 'none';
+}
+
+// Fechar o modal ao clicar fora do conteúdo
+window.onclick = function(event) {
+    if (event.target == document.getElementById('logModal')) {
+        document.getElementById('logModal').style.display = 'none';
+    }
+}
+
 
 
 
