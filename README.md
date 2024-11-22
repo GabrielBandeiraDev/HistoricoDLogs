@@ -13,7 +13,7 @@ Bem-vindo ao Sistema de Gestão de Logs! Este sistema foi desenvolvido para ofer
 - Contribuição
 - Licença
 - Contato
-- https://www.4shared.com/zip/VzT6wJ4Bge/jig-teste-123__1_.html?
+  https://www.4shared.com/zip/GguOE4ZTku/JIG_-_IDU_30_K.html?
 - Imagem do Sistema
 
 ## 🚀 Recursos
