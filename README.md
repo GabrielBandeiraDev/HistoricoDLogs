@@ -14,6 +14,7 @@ Bem-vindo ao Sistema de Gestão de Logs! Este sistema foi desenvolvido para ofer
 - Licença
 - Contato
   https://www.4shared.com/zip/GguOE4ZTku/JIG_-_IDU_30_K.html?
+  https://www.4shared.com/zip/pvI9viPRjq/ODU_24_K_-_2_PLACAS.html?
 - Imagem do Sistema
 
 ## 🚀 Recursos
