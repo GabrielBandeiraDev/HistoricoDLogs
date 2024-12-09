@@ -12,10 +12,8 @@ Bem-vindo ao Sistema de Gestão de Logs! Este sistema foi desenvolvido para ofer
 - Estrutura dos Dados
 - Contribuição
 - Licença
-- Contato
-  https://www.4shared.com/zip/GguOE4ZTku/JIG_-_IDU_30_K.html?
-  https://www.4shared.com/zip/pvI9viPRjq/ODU_24_K_-_2_PLACAS.html?
-- Imagem do Sistema
+- Contato : https://br.linkedin.com/in/gabriel-bandeira-macedo-a2107a139
+- Imagem do Sistema (Abaixo)
 
 ## 🚀 Recursos
 - Visualização de Logs: Interface amigável para exibir logs em tempo real.
